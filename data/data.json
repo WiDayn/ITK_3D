@@ -1,0 +1,89 @@
+{
+    "dataName":"Full_data",
+    "category": {
+      "categoryNums": 8,
+      "categoryNumsText": ["T10", "T11", "T12", "L1", "L2", "L3", "L4", "L5"],
+      "description": "category的ID从1开始"
+    },
+    "description": "为了json的可读性，我们使用name而不是id来标识分类，标签与coco中id将通过代码对应",
+    "CTList": [
+      {
+        "name": "wxt",
+        "DCMFilePath": "data/wxt.nii.gz",
+        "3DPlyPath": "3d/wxt.ply",
+        "sdr": 500,
+        "delx": 0.25,
+        "height": 666,
+        "boneList": [
+          {
+            "category_name": "L1",
+            "markBox_3d": [
+              [101, 118, 52],
+              [52, 69, 17]
+            ],
+            "markPoint_3d": [
+              [60.93, 72.07, 42],
+              [89.64, 71.19, 40.5],
+              [75, 90, 46],
+              [73.41, 98.35, 23.5]
+            ],
+            "drawLine": true,
+            "draw_box": true,
+            "draw_box_line": true,
+            "draw_point_line": true
+          },
+          {
+            "category_name": "L2",
+            "markBox_3d": [
+                [101, 110, 77],
+                [52, 61, 47]
+            ],
+            "markPoint_3d": [
+                [62, 62, 73],
+                [91, 63, 72],
+                [76, 84, 74],
+                [77.59, 89.85, 51.5]
+            ],
+            "drawLine": true,
+            "draw_box": false,
+            "draw_box_line": false,
+            "draw_point_line": false
+          },
+          {
+            "category_name": "T12",
+            "markBox_3d": [
+                [103, 100, 105],
+                [54, 60, 77]
+            ],
+            "markPoint_3d": [
+                [62, 64, 103],
+                [90, 62, 103],
+                [77.05, 82.61, 102.49],
+                [76.75, 82.97, 83.49]
+            ],
+            "drawLine": true,
+            "draw_box": false,
+            "draw_box_line": false,
+            "draw_point_line": false
+          },
+          {
+            "category_name": "T11",
+            "markBox_3d": [
+                [104, 100, 133],
+                [53, 60, 105]
+            ],
+            "markPoint_3d": [
+                [65.91, 65.32, 132.99],
+                [89.35, 63.57, 133.49],
+                [77.05, 81.73, 129.49],
+                [77.63, 82.02, 108.99]
+            ],
+            "drawLine": true,
+            "draw_box": false,
+            "draw_box_line": false,
+            "draw_point_line": false
+          }
+        ]
+      }
+    ]
+}

@@ -4,7 +4,7 @@ import json
 class COCOData:
     def __init__(self):
         self.info = {
-            "description": "Spine Key Points Data Set (L1, L2, T12, T11)",
+            "description": "Spine Key Points Data Set",
             "url": "https://KFC-CRAZY-THURSDAY-VME50.com",
             "version": "1.0",
             "year": 2023,

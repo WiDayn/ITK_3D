@@ -4,10 +4,14 @@ import open3d as o3d
 from tools.draw import draw_line_to_plane
 from tools.other import cla_point, line_plane_intersection, find_largest_area, back_color
 
+class CTStruct:
+    def __init__(self, filePath):
+        self.filePath = ''
+        self.boneStruct = []
 
 # 存单节骨头信息的结构
 class BoneStruct:
-    def __init__(self, category_id, markBox_3d, markPoint_3d, markPoint_Text, drawLine, cuboid_center, volume, spacing,
+    def __init__(self, category_id, markBox_3d, markPoint_3d, drawLine, cuboid_center, volume, spacing,
                  draw_box, draw_box_line, draw_point_line):
         # 参数
         self.category_id = category_id
@@ -15,8 +19,6 @@ class BoneStruct:
         self.markBox_3d = markBox_3d
         # MIMICS [侧视图， 正视图， 俯视图]
         self.markPoint_3d = markPoint_3d
-        # markPoint的注释
-        self.markPoint_Text = markPoint_Text
         # 是否画线到平面
         self.drawLine = drawLine
         # lineBox是在3D上的框

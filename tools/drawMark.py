@@ -1,3 +1,4 @@
+import json
 import math
 
 import numpy as np
@@ -9,99 +10,9 @@ from tools.boneStruct import BoneStruct
 from tools.other import line_plane_intersection, back_color
 from tools.vis_png import mark_points_on_image
 
-# 设置骨头的信息列表 category_id是在genData中与文本对应上的
-def getBoneList(cuboid_center, volume, spacing):
-    list = []
-    list.append(BoneStruct(
-        category_id=1,
-        markBox_3d=[
-            [101, 118, 52],
-            [52, 69, 17]
-        ],
-        markPoint_3d=[
-            [60.93, 72.07, 42],
-            [89.64, 71.19, 40.5],
-            [75, 90, 46],
-            [73.41, 98.35, 23.5]
-        ],
-        markPoint_Text=['左椎弓根', '右椎弓根', '椎体中心上', '椎体中心下'],
-        drawLine=True,
-        cuboid_center=cuboid_center,
-        volume=volume,
-        spacing=spacing,
-        draw_box=False,
-        draw_box_line=False,
-        draw_point_line=False,
-    ))
-    list.append(BoneStruct(
-        category_id=2,
-        markBox_3d=[
-            [101, 110, 77],
-            [52, 61, 47]
-        ],
-        markPoint_3d=[
-            [62, 62, 73],
-            [91, 63, 72],
-            [76, 84, 74],
-            [77.59, 89.85, 51.5]
-        ],
-        markPoint_Text=['左椎弓根', '右椎弓根', '椎体中心上', '椎体中心下'],
-        drawLine=True,
-        cuboid_center=cuboid_center,
-        volume=volume,
-        spacing=spacing,
-        draw_box=False,
-        draw_box_line=False,
-        draw_point_line=False,
-    ))
-    list.append(BoneStruct(
-        category_id=3,
-        markBox_3d=[
-            [103, 100, 105],
-            [54, 60, 77]
-        ],
-        markPoint_3d=[
-            [62, 64, 103],
-            [90, 62, 103],
-            [77.05, 82.61, 102.49],
-            [76.75, 82.97, 83.49]
-        ],
-        markPoint_Text=['左椎弓根', '右椎弓根', '椎体中心上', '椎体中心下'],
-        drawLine=True,
-        cuboid_center=cuboid_center,
-        volume=volume,
-        spacing=spacing,
-        draw_box=True,
-        draw_box_line=False,
-        draw_point_line=False,
-    ))
-    list.append(BoneStruct(
-        category_id=4,
-        markBox_3d=[
-            [104, 100, 133],
-            [53, 60, 105]
-        ],
-        markPoint_3d=[
-            [65.91, 65.32, 132.99],
-            [89.35, 63.57, 133.49],
-            [77.05, 81.73, 129.49],
-            [77.63, 82.02, 108.99]
-        ],
-        markPoint_Text=['左椎弓根', '右椎弓根', '椎体中心上', '椎体中心下'],
-        drawLine=True,
-        cuboid_center=cuboid_center,
-        volume=volume,
-        spacing=spacing,
-        draw_box=False,
-        draw_box_line=False,
-        draw_point_line=False,
-    ))
-    return list
-
-
 # is_gen 生成数据集模式 show3d 显示3d窗口
 def drawMark(volume, spacing, sdr, height, delx, rotations, translations, saveIMG, imgID, mesh, is_gen, show3d,
-             dataSet):
+             dataSet, boneList):
     scene = o3d.visualization.Visualizer()
 
     if not is_gen:
@@ -194,8 +105,6 @@ def drawMark(volume, spacing, sdr, height, delx, rotations, translations, saveIM
     sphere.transform(T)
     plane.transform(T)
 
-    boneList = getBoneList(cuboid_center, volume, spacing)
-
     for bone in boneList:
         bone.solve_2dPoint(sphere, plane, delx)
         bone.solve_2dBox(sphere, plane, delx)
@@ -218,7 +127,7 @@ def drawMark(volume, spacing, sdr, height, delx, rotations, translations, saveIM
 
                 dataSet.add_annotation_object(imgID, bone.category_id, [],
                                               (bone.markBox_2d[1][0] - bone.markBox_2d[0][0]) * (
-                                                          bone.markBox_2d[1][1] - bone.markBox_2d[0][1]),
+                                                      bone.markBox_2d[1][1] - bone.markBox_2d[0][1]),
                                               validPointCount,
                                               points,
                                               [bone.markBox_2d[0][0], bone.markBox_2d[0][1],

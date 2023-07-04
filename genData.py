@@ -1,25 +1,14 @@
 import csv
+import json
 
 import numpy as np
 import nibabel as nib
 
 from tools.COCOData import COCOData
+from tools.boneStruct import CTStruct, BoneStruct
 from tools.drawMark import drawMark
 from tools.genDRR import genDRR
 
-dataSet = COCOData()
-dataSet.add_category(1, "L1", "object",
-                     keypoints=['Left pedicle', 'Right pedicle', 'Centrum top', 'Centrum down'],
-                     skeleton=[])
-dataSet.add_category(2, "L2", "object",
-                     keypoints=['Left pedicle', 'Right pedicle', 'Centrum top', 'Centrum down'],
-                     skeleton=[])
-dataSet.add_category(3, "T12", "object",
-                     keypoints=['Left pedicle', 'Right pedicle', 'Centrum top', 'Centrum down'],
-                     skeleton=[])
-dataSet.add_category(4, "T11", "object",
-                     keypoints=['Left pedicle', 'Right pedicle', 'Centrum top', 'Centrum down'],
-                     skeleton=[])
 
 # 随机生成参数
 def sample_dataset(rot_range, trans_range, num_samples):
@@ -35,38 +24,81 @@ def sample_dataset(rot_range, trans_range, num_samples):
     return rotations, translations
 
 
-# 参数范围
-rot_range = (-180, 180)
-trans_range = (-75, 75)
-num_samples = 100000
+dataSet = COCOData()
+categoryMap = {}
 
-rotations, translations = sample_dataset(rot_range, trans_range, num_samples)
+with open('data/data.json', 'r', encoding='utf-8') as file:
+    json_data = json.load(file)
 
+id = 1
+
+for categoryNumsText in json_data['category']['categoryNumsText']:
+    categoryMap[categoryNumsText] = id
+    dataSet.add_category(id, categoryNumsText, "object",
+                         keypoints=['left_pedicle', 'right_pedicle', 'centrum_top', 'centrum_down'],
+                         skeleton=[])
+    id += 1
+
+# 依次处理每一个CT
 i = 1
 
-for rotation, translation in zip(rotations, translations):
-    sdr = 500.0
-    height = 1000
-    delx = 0.25
-    ctDir = "./504 1.0 x 0.5_bone.nii.gz"
-    saveDir = './dataset'
-    saveIMG = f"{i:09d}" + '.png'
+for CTJSON in json_data['CTList']:
+    # 参数范围
+    rot_range = (-180, 180)
+    trans_range = (-75, 75)
+    num_samples = 1
+    rotations, translations = sample_dataset(rot_range, trans_range, num_samples)
 
+
+    ct = CTStruct(CTJSON["DCMFilePath"])
+    cuboid_center = [0, 0, CTJSON["sdr"]]
+
+    sdr = CTJSON["sdr"]
+    height = CTJSON["height"]
+    delx = CTJSON["delx"]
+
+    ctDir = CTJSON["DCMFilePath"]
     ct_image = nib.load(ctDir)
     header = ct_image.header
     volume = ct_image.shape
     spacing = header['pixdim'][1:4]
 
-    genDRR(sdr, height, delx, rotation, translation, ctDir, saveDir + '/' + saveIMG)
+    for BoneJson in CTJSON['boneList']:
+        ct.boneStruct.append(
+            BoneStruct(
+                category_id=categoryMap[BoneJson["category_name"]],
+                markBox_3d=BoneJson['markBox_3d'],
+                markPoint_3d=BoneJson['markPoint_3d'],
+                drawLine=True,
+                cuboid_center=cuboid_center,
+                volume=volume,
+                spacing=spacing,
+                draw_box=False,
+                draw_box_line=False,
+                draw_point_line=False,
+            )
+        )
 
-    dataSet.add_image(i, height, height, saveIMG)
+    for rotation, translation in zip(rotations, translations):
+        saveDir = './dataset'
+        saveIMG = f"{i:09d}" + '.png'
 
-    drawMark(volume, spacing, sdr, height, delx, rotation, translation, saveDir + '/' + saveIMG, i, None, True, dataSet)
+        ct_image = nib.load(ctDir)
+        header = ct_image.header
+        volume = ct_image.shape
+        spacing = header['pixdim'][1:4]
 
-    i += 1
-    print("Now ID: ", i)
-    print("Rotation angles:", rotation)
-    print("Translations:", translation)
+        genDRR(sdr, height, delx, rotation, translation, ctDir, saveDir + '/' + saveIMG)
+
+        dataSet.add_image(i, height, height, saveIMG)
+
+        drawMark(volume, spacing, sdr, height, delx, rotation, translation, saveDir + '/' + saveIMG, i, None, True,
+                 False, dataSet, ct.boneStruct)
+
+        i += 1
+        print("Now ID: ", i)
+        print("Rotation angles:", rotation)
+        print("Translations:", translation)
 
 dataSet.to_json("coco_data.json")
 print("Done!")
