@@ -22,7 +22,7 @@ def main():
         id += 1
 
     for CTJSON in json_data['CTList']:
-        if CTJSON["name"] != "wxt":
+        if CTJSON["name"] != "syl":
             continue
 
         sdr = CTJSON["sdr"]
@@ -40,7 +40,7 @@ def main():
         # 加载3D模型，并且移动到方框内
         mesh = o3d.io.read_triangle_mesh(CTJSON["3DPlyPath"])
 
-        rotations = [90, 90, 0]
+        rotations = [0, 90, 0]
         translations = [0, -0, -0]
 
         saveIMG = "image.png"

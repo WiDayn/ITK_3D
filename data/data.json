@@ -5,7 +5,7 @@
       "categoryNumsText": ["T10", "T11", "T12", "L1", "L2", "L3", "L4", "L5"],
       "description": "category的ID从1开始"
     },
-    "description": "为了json的可读性，我们使用name而不是id来标识分类，标签与coco中id将通过代码对应",
+    "description": "为了json的可读性，我们使用name而不是id来标识分类，标签与coco中id将通过代码自动排列对应(Map)",
     "CTList": [
       {
         "name": "wxt",
@@ -13,7 +13,7 @@
         "3DPlyPath": "3d/wxt.ply",
         "sdr": 500,
         "delx": 0.25,
-        "height": 666,
+        "height": 1000,
         "boneList": [
           {
             "category_name": "L1",
@@ -82,6 +82,50 @@
             "draw_box": false,
             "draw_box_line": false,
             "draw_point_line": false
+          }
+        ]
+      },
+      {
+        "name": "syl",
+        "DCMFilePath": "data/syl.nii.gz",
+        "3DPlyPath": "3d/wxt.ply",
+        "sdr": 500,
+        "delx": 0.25,
+        "height": 2000,
+        "boneList": [
+          {
+            "category_name": "L5",
+            "markBox_3d": [
+              [130, 160, 71],
+              [62, 115, 39]
+            ],
+            "markPoint_3d": [
+              [81.42, 121.75, 70],
+              [119.87, 124.01, 69.0],
+              [98, 144.37, 67],
+              [95.74, 140.98, 41.5]
+            ],
+            "drawLine": true,
+            "draw_box": true,
+            "draw_box_line": true,
+            "draw_point_line": true
+          },
+          {
+            "category_name": "L4",
+            "markBox_3d": [
+              [133, 180, 92],
+              [78, 133, 51]
+            ],
+            "markPoint_3d": [
+              [81.04, 139.84, 88.5],
+              [115.34, 141.73, 90.0],
+              [97.25, 158.69, 86],
+              [98.00, 155.30, 64.00]
+            ],
+            "drawLine": true,
+            "draw_box": true,
+            "draw_box_line": true,
+            "draw_point_line": true
           }
         ]
       }

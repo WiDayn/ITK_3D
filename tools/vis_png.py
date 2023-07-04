@@ -9,16 +9,21 @@ def mark_points_on_image(image_path, boneList):
     # 显示图像
     plt.imshow(image)
 
+    color = ["#FF0000", "#0000FF", "#00FF00", "#FFFF00"]
+
     # 标出给定的点
     for bone in boneList:
         if bone.markBox_2d[0][0] == -1 or bone.markBox_2d[0][1] == -1:
             continue
 
+        i = 0
+
         for point in bone.markPoint_2d:
             x, y = point[0], point[1]
             if x == -1 or y == -1:
                 continue
-            plt.scatter(x, y, s=50, c='red', edgecolor='red')
+            plt.scatter(x, y, s=50, c=color[i], edgecolor=color[i])
+            i += 1
 
         x = [bone.markBox_2d[0][0], bone.markBox_2d[1][0], bone.markBox_2d[1][0], bone.markBox_2d[0][0]]
         y = [bone.markBox_2d[0][1], bone.markBox_2d[0][1], bone.markBox_2d[1][1], bone.markBox_2d[1][1]]
