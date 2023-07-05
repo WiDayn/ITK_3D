@@ -136,44 +136,44 @@ def drawMark(volume, spacing, sdr, height, delx, rotations, translations, saveIM
                                                ])
         return
     else:
-        # 渲染场景
-        # 用于显示3D模型边框线条
-        lines = o3d.geometry.LineSet.create_from_triangle_mesh(cuboid)
-
-        for bone in boneList:
-            scene = bone.add_points_3d_to_scene(scene)
-            scene = bone.add_mask_to_scene(scene)
-            scene = bone.draw_line_markBox_3d_to_plane(sphere, plane, scene)
-            scene = bone.draw_points_3d_to_plane_line(sphere, plane, scene)
-
-        # 相机方向指示线
-        # draw_camera_line(sphere, plane, scene)
-
-        # 这四条是指示图像边界的
-        # draw_boarder(plane, sphere, cuboid, scene)
-
-        # 指示mask边界
-
-        # 到平面中心的线
-        # draw_center_line(sphere, plane, scene)
-
-        # testp = o3d.geometry.TriangleMesh.create_sphere(radius=5)
-        # testp.paint_uniform_color([1, 0, 0])
-        # testp.translate([-50, -50, 68])
-        # scene.add_geometry(testp)
-
-        scene.add_geometry(mesh)
-        scene.add_geometry(sphere)
-        scene.add_geometry(plane)
-        scene.add_geometry(lines)
-        scene.add_geometry(cuboid_zero)
-
-        opt = scene.get_render_option()
-        opt.background_color = np.asarray([0.7, 0.85, 1.0])  # 设置为灰色背景
-        opt.line_width = 30
-
         mark_points_on_image(saveIMG, boneList)
         if show3d:
+            # 渲染场景
+            # 用于显示3D模型边框线条
+            lines = o3d.geometry.LineSet.create_from_triangle_mesh(cuboid)
+
+            for bone in boneList:
+                scene = bone.add_points_3d_to_scene(scene)
+                scene = bone.add_mask_to_scene(scene)
+                scene = bone.draw_line_markBox_3d_to_plane(sphere, plane, scene)
+                scene = bone.draw_points_3d_to_plane_line(sphere, plane, scene)
+
+            # 相机方向指示线
+            # draw_camera_line(sphere, plane, scene)
+
+            # 这四条是指示图像边界的
+            # draw_boarder(plane, sphere, cuboid, scene)
+
+            # 指示mask边界
+
+            # 到平面中心的线
+            # draw_center_line(sphere, plane, scene)
+
+            # testp = o3d.geometry.TriangleMesh.create_sphere(radius=5)
+            # testp.paint_uniform_color([1, 0, 0])
+            # testp.translate([-50, -50, 68])
+            # scene.add_geometry(testp)
+
+            scene.add_geometry(mesh)
+            scene.add_geometry(sphere)
+            scene.add_geometry(plane)
+            scene.add_geometry(lines)
+            scene.add_geometry(cuboid_zero)
+
+            opt = scene.get_render_option()
+            opt.background_color = np.asarray([0.7, 0.85, 1.0])  # 设置为灰色背景
+            opt.line_width = 30
+
             scene.run()
             scene.destroy_window()
 

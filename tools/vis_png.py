@@ -16,14 +16,14 @@ def mark_points_on_image(image_path, boneList):
         if bone.markBox_2d[0][0] == -1 or bone.markBox_2d[0][1] == -1:
             continue
 
-        i = 0
+        i = -1
 
         for point in bone.markPoint_2d:
+            i += 1
             x, y = point[0], point[1]
             if x == -1 or y == -1:
                 continue
-            plt.scatter(x, y, s=50, c=color[i], edgecolor=color[i])
-            i += 1
+            plt.scatter(x, y, s=30, c=color[i], edgecolor=color[i])
 
         x = [bone.markBox_2d[0][0], bone.markBox_2d[1][0], bone.markBox_2d[1][0], bone.markBox_2d[0][0]]
         y = [bone.markBox_2d[0][1], bone.markBox_2d[0][1], bone.markBox_2d[1][1], bone.markBox_2d[1][1]]
@@ -32,7 +32,6 @@ def mark_points_on_image(image_path, boneList):
         y.append(y[0])
         # 画出矩形
         plt.plot(x, y, '-')
-
 
     # 显示标记后的图像
     plt.show()
