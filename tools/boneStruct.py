@@ -4,10 +4,12 @@ import open3d as o3d
 from tools.draw import draw_line_to_plane
 from tools.other import cla_point, line_plane_intersection, find_largest_area, back_color
 
+
 class CTStruct:
     def __init__(self, filePath):
         self.filePath = ''
         self.boneStruct = []
+
 
 # 存单节骨头信息的结构
 class BoneStruct:
@@ -52,6 +54,7 @@ class BoneStruct:
 
     # 解析出标志点在图像的位置
     def solve_2dPoint(self, sphere, plane, delx):
+        self.markPoint_2d = []
         for point in self.markPoint_3d:
             cuboid_point = o3d.geometry.TriangleMesh.create_sphere(radius=3)
             cuboid_point.translate(self.cuboid_center)
@@ -66,6 +69,7 @@ class BoneStruct:
     def solve_2dBox(self, sphere, plane, delx):
         plane_point = plane.vertices
         points = []
+        self.markBox_2d = []
         for i in range(0, 8):
             points.append(line_plane_intersection(
                 sphere.get_center(), np.asarray(self.lineBox_3d.vertices)[i], plane_point))

@@ -84,10 +84,13 @@ def drawMark(volume, spacing, sdr, height, delx, rotations, translations, saveIM
     # print([-volume[0] * spacing[0] / 2.0, -volume[1] * spacing[1] / 2.0, -volume[2] * spacing[2] / 2.0])
     # mesh.translate([-volume[0] * spacing[0] / 2.0, -volume[1] * spacing[1] / 2.0, -volume[2] * spacing[2] / 2.0])
     if not is_gen:
-        mesh.translate(-mesh.get_center())
+        center = mesh.get_center()
+        mesh.translate(-center)
         rotation_matrix = np.eye(4)
         rotation_matrix[:3, :3] = o3d.geometry.get_rotation_matrix_from_xyz([0, torch.pi, -torch.pi])
         mesh.transform(rotation_matrix)
+        mesh.translate(center)
+        mesh.translate([-volume[0] * spacing[0] / 2.0, -volume[1] * spacing[1] / 2.0, -volume[2] * spacing[2] / 2.0])
         # # 移动到sdr
         mesh.translate([volume[0] * spacing[0] / 2, volume[1] * spacing[1] / 2, sdr + volume[2] * spacing[2] / 2.0])
 
@@ -109,8 +112,11 @@ def drawMark(volume, spacing, sdr, height, delx, rotations, translations, saveIM
         bone.solve_2dPoint(sphere, plane, delx)
         bone.solve_2dBox(sphere, plane, delx)
 
+
     if is_gen:
         for bone in boneList:
+            if len(bone.markPoint_2d) > 4:
+                print("nb")
             if bone.markBox_2d[0][0] != -1 and bone.markBox_2d[0][1] != -1:
                 points = []
                 validPointCount = 0
@@ -119,7 +125,7 @@ def drawMark(volume, spacing, sdr, height, delx, rotations, translations, saveIM
                         points.append(point[0])
                         points.append(point[1])
                         points.append(2)
-                        validPointCount += 1
+                        validPointCount = validPointCount + 1
                     else:
                         points.append(0)
                         points.append(0)

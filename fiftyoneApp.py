@@ -16,6 +16,7 @@ dataset = fo.Dataset.from_dir(
     labels_path=labels_path,
 )
 
-session = fo.launch_app()
+session = fo.launch_app(auto=False, port=5151)
 session.dataset = dataset
+session.show()
 session.wait()
